@@ -268,6 +268,14 @@ spec:
             {{- toYaml .Values.env | nindent 12 }}
           {{- end }}
           {{- include "invox.envFrom" . | nindent 10 }}
+          {{- if .Values.volumeMounts }}
+          volumeMounts:
+            {{- toYaml .Values.volumeMounts | nindent 12 }}
+          {{- end }}
+      {{- if .Values.volumes }}
+      volumes:
+        {{- toYaml .Values.volumes | nindent 8 }}
+      {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
