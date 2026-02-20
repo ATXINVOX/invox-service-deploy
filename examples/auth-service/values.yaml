@@ -1,0 +1,68 @@
+# Configuration for auth-service deployment using invox-service-deploy library
+
+# Image configuration
+image:
+  name: auth-service
+  tag: latest
+
+# Service account
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+# Service configuration
+service:
+  ports:
+    - name: http
+      port: 80
+      containerPort: 8000
+      targetPort: http
+
+# Health check configuration
+probes:
+  liveness:
+    enabled: true
+    path: /health
+    initialDelaySeconds: 30
+  readiness:
+    enabled: true
+    path: /health
+    initialDelaySeconds: 5
+
+# Environment configuration
+envFrom:
+  configMaps:
+    - auth-config
+  secrets:
+    - auth-secrets
+    - database-secret
+
+# Resource limits
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+
+# Autoscaling (optional)
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+
+# Ingress (optional)
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: auth.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []

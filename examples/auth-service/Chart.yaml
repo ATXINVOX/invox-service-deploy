@@ -1,0 +1,11 @@
+apiVersion: v2
+name: auth-service
+description: ATXINVOX Authentication Service
+type: application
+version: 0.1.0
+appVersion: latest
+
+dependencies:
+  - name: invox-service-deploy
+    version: "0.1.0"
+    repository: "file://../../"

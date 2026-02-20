@@ -1,0 +1,4 @@
+{{/*
+Deploy auth-service using the invox-service-deploy library chart
+*/}}
+{{ include "invox.microservice" . }}
