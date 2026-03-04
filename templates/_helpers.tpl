@@ -444,12 +444,32 @@ spec:
 {{- end -}}
 
 {{/*
+ConfigMap template
+*/}}
+{{- define "invox.configmap" -}}
+{{- if and .Values.configMap .Values.configMap.data }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.configMap.name | default (printf "%s-config" (include "invox.name" . | replace "-service" "")) }}
+  labels:
+    {{- include "invox.labels" . | nindent 4 }}
+data:
+  {{- toYaml .Values.configMap.data | nindent 2 }}
+{{- end }}
+{{- end -}}
+
+{{/*
 All-in-one template that includes common microservice resources
 */}}
 {{- define "invox.microservice" -}}
 {{- $serviceAccount := .Values.serviceAccount | default dict -}}
 {{- if $serviceAccount.create | default true }}
 {{- include "invox.serviceAccount" . }}
+---
+{{- end }}
+{{- if and .Values.configMap .Values.configMap.data }}
+{{ include "invox.configmap" . }}
 ---
 {{- end }}
 {{ include "invox.deployment" . }}
